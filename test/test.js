@@ -8,10 +8,10 @@ var include = require('../index')
 var processor = remark().use(include)
 
 var map = {
-  '@include a.md': '# A',
-  '@include a': '# A',
-  '@include b': '# B',
-  '@include sub/sub': '# A\n\n# sub'
+  '@import a.md': '# A',
+  '@import a': '# A',
+  '@import b': '# B',
+  '@import sub/sub': '# A\n\n# sub'
 }
 
 function transform (lines) {
@@ -29,7 +29,7 @@ function loadFile (filePath) {
   })
 }
 
-tap.test('should include by exact path', function (t) {
+tap.test('should import by exact path', function (t) {
   var file = loadFile('exact.md')
   t.equal(
     processor.processSync(file).toString(),
@@ -38,7 +38,7 @@ tap.test('should include by exact path', function (t) {
   t.end()
 })
 
-tap.test('should include by guessing extension', function (t) {
+tap.test('should import by guessing extension', function (t) {
   var file = loadFile('guess.md')
   t.equal(
     processor.processSync(file).toString(),
@@ -47,7 +47,7 @@ tap.test('should include by guessing extension', function (t) {
   t.end()
 })
 
-tap.test('should include from sub and super paths', function (t) {
+tap.test('should import from sub and super paths', function (t) {
   var file = loadFile('super.md')
   t.equal(
     processor.processSync(file).toString(),
@@ -56,10 +56,10 @@ tap.test('should include from sub and super paths', function (t) {
   t.end()
 })
 
-tap.test('should fail to include non-existent file', function (t) {
+tap.test('should fail to import non-existent file', function (t) {
   t.throws(
-    function () { processor.processSync('@include nope.md').toString() },
-    'Unable to include ' + path.join(process.cwd(), 'nope.md')
+    function () { processor.processSync('@import nope.md').toString() },
+    'Unable to import ' + path.join(process.cwd(), 'nope.md')
   )
   t.end()
 })

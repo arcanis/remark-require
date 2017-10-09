@@ -2,7 +2,7 @@ var VFile = require('vfile')
 var path = require('path')
 var fs = require('fs')
 
-var parseInclude = /^@include (.*)(\n|$)/
+var parseImport = /^@import (.*)(\n|$)/
 
 module.exports = function (options) {
   var proc = this;
@@ -10,15 +10,19 @@ module.exports = function (options) {
   var cwd = options.cwd || process.cwd()
 
   var prt = proc.Parser.prototype
-  prt.blockTokenizers.include = tokenizer
-  prt.blockMethods.unshift('include')
+  prt.blockTokenizers.import = tokenizer
+  prt.blockMethods.unshift('import')
 
   return function transformer(ast, file) {
     var children = ast.children
 
     for (var i = 0; i < children.length; i++) {
       var child = children[i]
-      if (child.type === 'include') {
+      if (child.type === 'import') {
+          
+          console.log("my object: %o", children)
+          throw new Error('all done');
+          
         // Load file and create VFile
         // console.log(cwd, file)
         // var file = toFile(path.join(file.dirname || cwd, child.value))
@@ -51,17 +55,17 @@ function tokenizer (eat, value, silent) {
   var now = eat.now()
   var node
 
-  if (silent && parseInclude.test(value)) {
+  if (silent && parseImport.test(value)) {
     return true
   }
 
-  // Replace all lines beginning with @include
-  while (parseInclude.test(value)) {
-    var file = value.match(parseInclude)[1]
-    var frag = '@include ' + file
+  // Replace all lines beginning with @import
+  while (parseImport.test(value)) {
+    var file = value.match(parseImport)[1]
+    var frag = '@import ' + file
     value = value.slice(frag.length)
     eat(frag)({
-      type: 'include',
+      type: 'import',
       source: this.file,
       value: file
     })
@@ -75,7 +79,7 @@ function toFile(full) {
 }
 
 function loadContent(file) {
-  // console.log('loading', file)
+  console.log('loading', file)
   try { return fs.readFileSync(file) }
   catch (e) {}
 
@@ -85,5 +89,62 @@ function loadContent(file) {
   try { return fs.readFileSync(file + '.markdown') }
   catch (e) {}
 
-  throw new Error('Unable to include ' + file)
+  throw new Error('Unable to import ' + file)
+}
+
+function findIndex (array, fn) {
+  for (var i = 0; i < array.length; i++) {
+    if (fn(array[i], i)) {
+      return i
+    }
+  }
+  return -1
+}
+
+function isHeading (node, text, depth) {
+  if (node.type !== 'heading') {
+    return false
+  }
+
+  if (text) {
+    var headingText = toString(node)
+    // TODO: more flexible match?
+    return text.trim().toLowerCase() === headingText.trim().toLowerCase()
+  }
+
+  if (depth) {
+    return node.depth <= depth
+  }
+
+  return true
+}
+
+var MAX_HEADING_DEPTH = 99999
+
+function bumpHeadings (root, baseDepth) {
+  var headings = []
+  walk(root, function (node) {
+    if (node.type === 'heading') {
+      headings.push(node)
+    }
+  })
+
+  var minDepth = headings.reduce(function (memo, h) {
+    return Math.min(memo, h.depth)
+  }, MAX_HEADING_DEPTH)
+
+  var diff = baseDepth + 1 - minDepth
+
+  headings.forEach(function (h) {
+    h.depth += diff
+  })
+}
+
+function walk (node, fn) {
+  fn(node)
+  if (node.children) {
+    node.children.forEach(function (n) {
+      walk(n, fn)
+    })
+  }
 }

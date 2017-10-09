@@ -1,4 +1,4 @@
 # before
-@include a
-@include b
+@import a
+@import b
 # after

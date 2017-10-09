@@ -1,3 +1,3 @@
-@include ../a
+@import ../a
 
 # sub

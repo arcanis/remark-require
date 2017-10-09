@@ -1,3 +1,3 @@
 # before
-@include a.md
+@import a.md
 # after
