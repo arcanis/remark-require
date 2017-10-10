@@ -15,30 +15,31 @@ module.exports = function (options) {
 
   return function transformer(ast, file) {
     var children = ast.children
+    var headerLevel = 0
 
     for (var i = 0; i < children.length; i++) {
       var child = children[i]
+      
+      // We'll save the most recent header level as a variable ...
+      if (child.type === 'heading') { headerLevel = child.depth; }
+      
+      // ... Until we find the import statement.
       if (child.type === 'import') {
-          
-          console.log("my object: %o", children)
-          throw new Error('all done');
-          
-        // Load file and create VFile
-        // console.log(cwd, file)
-        // var file = toFile(path.join(file.dirname || cwd, child.value))
 
-        // Parse vfile contents
-        // var parser = new processor.Parser(file, null, processor)
+        // Load the file to be imported into 'root'
         var root = proc.runSync(proc.parse(
           toFile(path.join(child.source.dirname || cwd, child.value))
         ))
+        
+        // Bump the headings of root up to the most recent header level
+        root = bumpHeadings(root, headerLevel)
 
-        // Split and merge the head and tail around the new children
+        // Split and merge the head and tail around the imported document
         var head = children.slice(0, i)
         var tail = children.slice(i + 1)
         children = head.concat(root.children).concat(tail)
 
-        // Remember to update the offset!
+        // And update the offset!
         i += root.children.length - 1
       }
     }
@@ -79,7 +80,7 @@ function toFile(full) {
 }
 
 function loadContent(file) {
-  console.log('loading', file)
+  // console.log('loading', file)
   try { return fs.readFileSync(file) }
   catch (e) {}
 
@@ -108,7 +109,6 @@ function isHeading (node, text, depth) {
 
   if (text) {
     var headingText = toString(node)
-    // TODO: more flexible match?
     return text.trim().toLowerCase() === headingText.trim().toLowerCase()
   }
 
@@ -118,8 +118,6 @@ function isHeading (node, text, depth) {
 
   return true
 }
-
-var MAX_HEADING_DEPTH = 99999
 
 function bumpHeadings (root, baseDepth) {
   var headings = []
@@ -131,14 +129,16 @@ function bumpHeadings (root, baseDepth) {
 
   var minDepth = headings.reduce(function (memo, h) {
     return Math.min(memo, h.depth)
-  }, MAX_HEADING_DEPTH)
+}, 6)
 
-  var diff = baseDepth + 1 - minDepth
-
+  var diff = baseDepth + 1 - minDepth  
   headings.forEach(function (h) {
     h.depth += diff
   })
+  return root;
 }
+
+
 
 function walk (node, fn) {
   fn(node)
