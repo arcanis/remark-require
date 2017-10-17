@@ -10,13 +10,13 @@
       "url": "http://www.brekitomasson.com"
   },
   "license": "MIT",
-  "homepage": "https://github.com/Qard/remark-include#readme",
+  "homepage": "https://github.com/BrekiTomasson/remark-include#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Qard/remark-include.git"
+    "url": "git+https://github.com/BrekiTomasson/remark-include.git"
   },
   "bugs": {
-    "url": "https://github.com/Qard/remark-include/issues"
+    "url": "https://github.com/BrekiTomasson/remark-include/issues"
   },
   "directories": {
     "test": "test"
