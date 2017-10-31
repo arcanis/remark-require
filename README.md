@@ -1,31 +1,39 @@
-# remark-include
+> Note - This is still a work in progress. First release candidate estimated during first half of November 2017.
 
-With remark-include, you can use @include statements to include one file from another.
+# remark-import
 
-## Install
+With remark-import, you can use `@import` statements to include one file from another.
 
-```console
-npm install remark-include
-```
+## Thanks
 
-## Usage
+The original version that this repo is forked from is `remark-include` by Stephen Belanger, which was instrumental
+in getting this to work out properly. I have changed it from "include" to "import" to better match the terminology
+which I am accustomed to and have added two additional features.
 
-```js
-var remark = require('remark')
-var include = require('remark-include')
+## Additional Features
 
-remark().use(include).processSync('@include first.md\n@include second.md').toString()
-```
+While the original version by Stephen Belanger was good, it was missing two things that I felt were essential for
+this to match my requirements. I have since then added the following two features:
 
-## NOTE
+1. An imported markdown file will "inherit" the heading levels. If the `import` statement happens under Heading 2,
+for example, any heading 1 in the imported file will be "translated" to have header level 3. Future versions will
+most likely have this as the default behavior but allow for a flag to import the file without translating header
+levels.
 
-If remark is given string content, it will use process.cwd() as the directory to resolve the include paths within that
-content. You can supply the working directory using `remark.use(include, { cwd: __dirname })`. Alternatively, you can
-use [VFiles](http://npmjs.org/package/vfile) rather than strings to ensure correct path resolution.
+2. Relative images and links in the imported files will have their paths rewritten to be relative the original
+document rather than the imported file. So if `\usr\breki\text\document\` has the statement `@import ./extra/detail.md`
+which, in turn, contains an image reference to `./img/JohnLocke.png`, the plugin will rewrite that path to instead
+referece `./extra/img/JohnLocke.png`.
 
----
+## Other Changes
 
-### Copyright (c) 2016 Stephen Belanger
+A few other changes have been made to Stephen's original. They include:
+
+* Removing all tests (New tests will be added later).
+* Rewriting `var` statements to either `let` or `const` statements.
+* Separating functions into separate files.
+* Changing indentation in a few places to make the code easier to read for me.
+
 #### Licensed under MIT License
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
