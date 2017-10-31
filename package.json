@@ -1,13 +1,12 @@
 {
-  "name": "remark-include",
-  "version": "2.0.1",
-  "description": "Transform @include statements to contents",
+  "name": "remark-import",
+  "version": "0.0.5",
+  "description": "Transform @import statements to contents. Forked and heavily revised from Stephe Belanger's original remark-include.",
   "main": "index.js",
-  "author": "Stephen Belanger <admin@stephenbelanger.com>",
+  "author": "Breki Tomasson <breki.tomasson@gmail.com>"
   "contributors": {
-      "name": "Breki Tomasson",
-      "email": "breki.tomasson@enghouse.com",
-      "url": "http://www.brekitomasson.com"
+    "name": "Stephen Belanger",
+    "email": "admin@stephenbelanger.com",
   },
   "license": "MIT",
   "homepage": "https://github.com/BrekiTomasson/remark-include#readme",
@@ -18,17 +17,11 @@
   "bugs": {
     "url": "https://github.com/BrekiTomasson/remark-include/issues"
   },
-  "directories": {
-    "test": "test"
-  },
   "keywords": [
     "remark",
-    "include",
+    "import",
     "markdown"
   ],
-  "scripts": {
-    "test": "tap test/test.js"
-  },
   "devDependencies": {
     "remark": "^7.0.0",
     "tap": "^10.0.0"

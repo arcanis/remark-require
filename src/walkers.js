@@ -60,5 +60,8 @@ module.exports = {
         }
       }});
       return nodes;
-    }
-  };
+    },
+  toFile: function (full) {
+    return new VFile({path: full, contents: loadContent(full).toString('utf8')})
+  }
+};
