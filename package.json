@@ -3,19 +3,19 @@
   "version": "0.0.5",
   "description": "Transform @import statements to contents. Forked and heavily revised from Stephe Belanger's original remark-include.",
   "main": "index.js",
-  "author": "Breki Tomasson <breki.tomasson@gmail.com>"
+  "author": "Breki Tomasson <breki.tomasson@gmail.com>",
   "contributors": {
     "name": "Stephen Belanger",
-    "email": "admin@stephenbelanger.com",
+    "email": "admin@stephenbelanger.com"
   },
   "license": "MIT",
-  "homepage": "https://github.com/BrekiTomasson/remark-include#readme",
+  "homepage": "https://github.com/BrekiTomasson/remark-import#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/BrekiTomasson/remark-include.git"
+    "url": "git+https://github.com/BrekiTomasson/remark-import.git"
   },
   "bugs": {
-    "url": "https://github.com/BrekiTomasson/remark-include/issues"
+    "url": "https://github.com/BrekiTomasson/remark-import/issues"
   },
   "keywords": [
     "remark",
