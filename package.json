@@ -23,10 +23,9 @@
     "markdown"
   ],
   "devDependencies": {
-    "remark": "^7.0.0",
-    "tap": "^10.0.0"
+    "remark": "^7.0.0"
   },
   "dependencies": {
-    "vfile": "^2.0.0"
+    "vfile": "^2.2.0"
   }
 }
