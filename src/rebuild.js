@@ -1,4 +1,5 @@
 let path   = require('path')
+let abs    = require('path-absolute')
 let walker = require('./walkers.js')
 
 // ###########################################################################
@@ -11,31 +12,16 @@ let walker = require('./walkers.js')
 // ###########################################################################
 
 module.exports = {
-  links: function (nodes, fullpath) {
+  links: function (nodes, filepath, basepath) {
     walker.walk(nodes, function (node) {
+      if (node.type === 'image' || node.type === 'link') {
 
-// cwd needs to be set to current path relative from root
-// dir needs to be set to imported file's path relative from current path.
-// link needs to be set to link relative from imported path.
-// so:
-//      cwd:  /tmp/script
-//      dir:  ../docs
-//     link:  ./import/img/thing.png
-
-      // REBUILD RELATIVE IMAGE PATHS
-      if (node.type === 'imageReference') {
-        let link = node.identifier.slice(1,-1)
-        if (path.isAbsolute(link) === false) {
-          let dirname = path.dirname(fullpath);
-          node.alt = node.identifier = '(' + path.join(dirname, link) + ')'
+        let truepath = path.resolve(path.dirname(filepath), node.url)
+        node.url = path.relative(
+          basepath,
+          path.resolve(path.dirname(filepath), node.url)
+        )
         }
-      }
-
-      // REBUILD RELATIVE LINK PATHS
-      if (node.type === 'link' && path.isAbsolute(node.url) === false) {
-        node.url = path.relative('/', fullpath)
-      }
-
     })
     return nodes
   },
@@ -43,21 +29,17 @@ module.exports = {
   headings: function (nodes, baseDepth) {
     let headings = []
     walker.walk(nodes, function (node) {
-      if (node.type === 'heading') {
-        headings.push(node)
-      }
+        if (node.type === 'heading') {
+            headings.push(node)
+        }
     })
-
-    let minDepth = headings.reduce(function (memo, h) { return Math.min(memo, h.depth) }, 6)
-    let diff = baseDepth + 1 - minDepth
-    headings.forEach(function (h) { h.depth += diff })
+    let minDepth = headings.reduce(function (memo, h) {
+        return Math.min(memo, h.depth)
+    }, 6)
+    let diff     = baseDepth + 1 - minDepth
+    headings.forEach(function (h) {
+        h.depth += diff
+    })
     return nodes
   }
 }
-
-/*
-  TODO - Does it fail if there are no headers in the imported file?
-  TODO - Test absolute paths.
-  TODO - Test web paths
-  TODO - Anything other than links and images that needs to be rebuilt?
-*/

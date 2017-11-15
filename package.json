@@ -3,8 +3,10 @@
   "version": "0.0.5",
   "description": "Transform @import statements to contents. Forked and heavily revised from Stephe Belanger's original remark-include.",
   "main": "index.js",
-  "author": "Breki Tomasson <breki.tomasson@gmail.com>",
-  "contributors": {
+  "author": {
+    "name": "Breki Tomasson",
+    "email": "breki.tomasson@gmail.com"
+  },  "contributors": {
     "name": "Stephen Belanger",
     "email": "admin@stephenbelanger.com"
   },
@@ -22,10 +24,8 @@
     "import",
     "markdown"
   ],
-  "devDependencies": {
-    "remark": "^7.0.0"
-  },
   "dependencies": {
+    "path-absolute": "^1.0.0",
     "vfile": "^2.2.0"
   }
 }
