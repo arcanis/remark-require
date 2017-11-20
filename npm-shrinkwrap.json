@@ -1,0 +1,41 @@
+{
+  "name": "remark-import",
+  "version": "0.0.5",
+  "dependencies": {
+    "is-buffer": {
+      "version": "1.1.6",
+      "from": "is-buffer@>=1.1.4 <2.0.0",
+      "resolved": "https://registry.npmjs.org/is-buffer/-/is-buffer-1.1.6.tgz"
+    },
+    "is-local-path": {
+      "version": "0.1.6",
+      "from": "is-local-path",
+      "resolved": "https://registry.npmjs.org/is-local-path/-/is-local-path-0.1.6.tgz"
+    },
+    "js-base64-file": {
+      "version": "1.0.1",
+      "from": "js-base64-file@latest",
+      "resolved": "https://registry.npmjs.org/js-base64-file/-/js-base64-file-1.0.1.tgz"
+    },
+    "progress": {
+      "version": "2.0.0",
+      "from": "progress@latest",
+      "resolved": "https://registry.npmjs.org/progress/-/progress-2.0.0.tgz"
+    },
+    "replace-ext": {
+      "version": "1.0.0",
+      "from": "replace-ext@1.0.0",
+      "resolved": "https://registry.npmjs.org/replace-ext/-/replace-ext-1.0.0.tgz"
+    },
+    "unist-util-stringify-position": {
+      "version": "1.1.1",
+      "from": "unist-util-stringify-position@>=1.0.0 <2.0.0",
+      "resolved": "https://registry.npmjs.org/unist-util-stringify-position/-/unist-util-stringify-position-1.1.1.tgz"
+    },
+    "vfile": {
+      "version": "2.2.0",
+      "from": "vfile@>=2.2.0 <3.0.0",
+      "resolved": "https://registry.npmjs.org/vfile/-/vfile-2.2.0.tgz"
+    }
+  }
+}

@@ -1,5 +1,5 @@
-let path   = require('path')
-let abs    = require('path-absolute')
+let path = require('path')
+let isLocalPath = require('is-local-path')
 let walker = require('./walkers.js')
 
 // ###########################################################################
@@ -12,16 +12,13 @@ let walker = require('./walkers.js')
 // ###########################################################################
 
 module.exports = {
-  links: function (nodes, filepath, basepath) {
+  links: function (nodes, importPath, basePath) {
     walker.walk(nodes, function (node) {
-      if (node.type === 'image' || node.type === 'link') {
-
-        let truepath = path.resolve(path.dirname(filepath), node.url)
-        node.url = path.relative(
-          basepath,
-          path.resolve(path.dirname(filepath), node.url)
-        )
+      if (node.type === 'image' || node.type === 'link' || node.type === 'definition') {
+        if (isLocalPath(node.url)) {
+          node.url = path.resolve(basePath, path.resolve(path.dirname(path.join(basePath, importPath)), node.url))
         }
+      }
     })
     return nodes
   },
@@ -29,16 +26,16 @@ module.exports = {
   headings: function (nodes, baseDepth) {
     let headings = []
     walker.walk(nodes, function (node) {
-        if (node.type === 'heading') {
-            headings.push(node)
-        }
+      if (node.type === 'heading') {
+        headings.push(node)
+      }
     })
     let minDepth = headings.reduce(function (memo, h) {
-        return Math.min(memo, h.depth)
+      return Math.min(memo, h.depth)
     }, 6)
-    let diff     = baseDepth + 1 - minDepth
+    let diff = baseDepth + 1 - minDepth
     headings.forEach(function (h) {
-        h.depth += diff
+      h.depth += diff
     })
     return nodes
   }
