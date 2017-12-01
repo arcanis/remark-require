@@ -1,6 +1,6 @@
 {
   "name": "remark-import",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Transform @import statements to contents. Forked and heavily revised from Stephe Belanger's original remark-include.",
   "keywords": [
     "remark",
