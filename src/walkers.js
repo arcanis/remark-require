@@ -1,60 +1,49 @@
 let fs = require('fs')
 let VFile = require('vfile')
 
-module.exports = {
-  loadContent: function (file) {
-    // TODO Clean this up, the code here is dreadful.
-    try {
-      return fs.readFileSync(file)
-    } catch (e) { /* Do nothing. */ }
-    try {
-      return fs.readFileSync(file + '.md')
-    } catch (e) { /* Do nothing. */ }
-    try {
-      return fs.readFileSync(file + '.markdown')
-    } catch (e) { /* Do nothing. */ }
+function loadContent (file) {
+  // TODO - Clean this up, the code here is dreadful.
+  try { return fs.readFileSync(file) } catch (e) { /* Do nothing. */ }
+  try { return fs.readFileSync(file + '.md') } catch (e) { /* Do nothing. */ }
+  try { return fs.readFileSync(file + '.markdown') } catch (e) { /* Do nothing. */ }
 
-    throw new Error('Unable to import ' + file)
-  },
+  throw new Error('Unable to import ' + file)
+}
 
-  findIndex: function (array, fn) {
-    for (let i = 0; i < array.length; i++) {
-      if (fn(array[i], i)) { return i }
-    }
-    return -1
-  },
+function findIndex (array, fn) {
+  for (let i = 0; i < array.length; i++) { if (fn(array[i], i)) { return i } }
+  return -1
+}
 
-  isHeading: function (node, text, depth) {
-    if (node.type !== 'heading') {
-      return false
-    }
+function isHeading (node, text, depth) {
+  if (node.type !== 'heading') { return false }
 
-    if (text) {
-      let headingText = toString(node)
-      return text.trim().toLowerCase() === headingText.trim().toLowerCase()
-    }
-
-    if (depth) {
-      return node.depth <= depth
-    }
-
-    return true
-  },
-
-  walk: function (node, fn) {
-    fn(node)
-    if (node.children) {
-      var self = this
-      node.children.forEach(function (n) {
-        self.walk(n, fn)
-      })
-    }
-  },
-
-  toFile: function (full) {
-    return new VFile({
-      path: full,
-      contents: this.loadContent(full).toString('utf8')
-    })
+  if (text) {
+    let headingText = toString(node)
+    return text.trim().toLowerCase() === headingText.trim().toLowerCase()
   }
+
+  if (depth) { return node.depth <= depth }
+
+  return true
+}
+
+function walk (node, fn) {
+  fn(node)
+  if (node.children) {
+    var self = this
+    node.children.forEach(function (n) { self.walk(n, fn) })
+  }
+}
+
+function toFile (full) {
+  return new VFile({ path: full, contents: this.loadContent(full).toString('utf8') })
+}
+
+module.exports = {
+  loadContent: loadContent,
+  findIndex: findIndex,
+  isHeading: isHeading,
+  walk: walk,
+  toFile: toFile
 }

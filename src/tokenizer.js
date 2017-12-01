@@ -1,18 +1,10 @@
-module.exports = function (eat, value, silent) {
-  /*
-        let self     = this
-        let settings = self.options
-        let length   = value.length + 1
-        let index    = -1
-        let now      = eat.now()
-    */
+function tokenizer (eat, value, silent) {
   let parseImport = /^@import (.*?)(\n|$)/
   let node
 
-  if (silent && parseImport.test(value)) { return true }
-
-  // TODO: Strip characters that doesn't belong in the file name, just
-  //       in case people write their syntax like: @import "foo.md"
+  if (silent && parseImport.test(value)) {
+    return true
+  }
 
   while (parseImport.test(value)) {
     let file = value.match(parseImport)[1]
@@ -25,4 +17,8 @@ module.exports = function (eat, value, silent) {
     })
   }
   return node
+}
+
+module.exports = {
+  tokenizer: tokenizer
 }

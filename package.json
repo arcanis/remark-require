@@ -23,7 +23,7 @@
       "email": "admin@stephenbelanger.com"
     }
   ],
-  "main": "index.js",
+  "main": "src/remark-import.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/BrekiTomasson/remark-import.git"
