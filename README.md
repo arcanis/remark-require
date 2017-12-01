@@ -1,5 +1,3 @@
-> Note - This is still a work in progress. First release candidate estimated during first half of November 2017.
-
 # remark-import
 
 With remark-import, you can use `@import` statements to include one file from another.
@@ -29,10 +27,16 @@ referece `./extra/img/JohnLocke.png`.
 
 A few other changes have been made to Stephen's original. They include:
 
-* Removing all tests (New tests will be added later).
-* Rewriting `var` statements to either `let` or `const` statements.
-* Separating functions into separate files.
-* Changing indentation in a few places to make the code easier to read for me.
+- Removing all tests (New tests will be added later).
+- Rewriting `var` statements to either `let` or `const` statements.
+- Separating functions into separate files.
+- Changing indentation in a few places to make the code easier to read for me.
+
+## Coming soon
+
+- [ ] Tests!
+- [ ] A reworked tokenizer.
+- [ ] Separate module for the walker? Feels overworked.
 
 #### Licensed under MIT License
 
