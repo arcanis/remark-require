@@ -1,5 +1,5 @@
 Hello. I am an includer.
 
-@import ./included.md
+@require ./included
 
 _That_ should do it!

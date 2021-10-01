@@ -1,13 +1,19 @@
-let remark = require('remark')
+let path = require('path')
+const unified = require('unified')
+const remarkParse = require('remark-parse')
+const remarkHtml = require('remark-html')
+const stringify = require('rehype-stringify')
 let vfile = require('to-vfile')
 let imp = require('./../')
 
-remark()
+unified()
+  .use(remarkParse)
   .use(imp)
+  .use(remarkHtml)
   .process(
-    vfile.readSync('includer.md'),
+    vfile.readSync(path.join(__dirname, 'includer.md')),
     (err, out) => {
-      if (err) console.err(err)
+      if (err) console.error(err)
       console.log(out)
     }
-  )
+  );

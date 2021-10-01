@@ -1,21 +1,6 @@
 let fs = require('fs')
 let VFile = require('vfile')
 
-function loadContent (file) {
-  // TODO - Clean this up, the code here is dreadful.
-  try {
-    return fs.readFileSync(file)
-  } catch (e) {}
-  try {
-    return fs.readFileSync(file + '.md')
-  } catch (e) {}
-  try {
-    return fs.readFileSync(file + '.markdown')
-  } catch (e) {}
-
-  throw new Error('Unable to import ' + file)
-}
-
 function findIndex (array, fn) {
   for (let i = 0; i < array.length; i++) if (fn(array[i], i)) return i
   return -1
@@ -51,13 +36,11 @@ function walk (node, fn) {
 function toFile (full) {
   return new VFile({
     path     : full,
-    contents : this.loadContent(full)
-      .toString('utf8')
+    contents : require(full)()
   })
 }
 
 module.exports = {
-  loadContent : loadContent,
   findIndex   : findIndex,
   isHeading   : isHeading,
   walk        : walk,

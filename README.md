@@ -4,39 +4,11 @@ With remark-import, you can use `@import` statements to include one file from an
 
 ## Thanks
 
-The original version that this repo is forked from is `remark-include` by Stephen Belanger, which was instrumental
-in getting this to work out properly. I have changed it from "include" to "import" to better match the terminology
-which I am accustomed to and have added two additional features.
+The original versions that this repo is forked from is `remark-include` by Stephen Belanger, then forked as `remark-import` by Breki Tomasson.
 
 ## Additional Features
 
-While the original version by Stephen Belanger was good, it was missing two things that I felt were essential for
-this to match my requirements. I have since then added the following two features:
-
-1. An imported markdown file will "inherit" the heading levels. If the `import` statement happens under Heading 2,
-for example, any heading 1 in the imported file will be "translated" to have header level 3. Future versions will
-most likely have this as the default behavior but allow for a flag to import the file without translating header
-levels.
-
-2. Relative images and links in the imported files will have their paths rewritten to be relative the original
-document rather than the imported file. So if `\usr\breki\text\document\` has the statement `@import ./extra/detail.md`
-which, in turn, contains an image reference to `./img/JohnLocke.png`, the plugin will rewrite that path to instead
-referece `./extra/img/JohnLocke.png`.
-
-## Other Changes
-
-A few other changes have been made to Stephen's original. They include:
-
-- Removing all tests (New tests will be added later).
-- Rewriting `var` statements to either `let` or `const` statements.
-- Separating functions into separate files.
-- Changing indentation in a few places to make the code easier to read for me.
-
-## Coming soon
-
-- [ ] Tests!
-- [ ] A reworked tokenizer.
-- [ ] Separate module for the walker? Feels overworked.
+Both original packages read the content from the specified markdown file and inject it into the document. This version instead executes the specified JS file and inject it into the document.
 
 #### Licensed under MIT License
 

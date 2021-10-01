@@ -2,9 +2,6 @@
 let path = require('path')
 let rebuild = require('./rebuild.js')
 let walkers = require('./walkers.js')
-const zero = 0
-const one  = 1
-const PLUGIN_NAME = 'remark-import'
 
 function bumpAndLink (root, headerLevel, child) {
   root = rebuild.headings(root, headerLevel)
@@ -13,8 +10,8 @@ function bumpAndLink (root, headerLevel, child) {
 }
 
 function splitAndMerge (children, i, root) {
-  let head = children.slice(zero, i)
-  let tail = children.slice(i + one)
+  let head = children.slice(0, i)
+  let tail = children.slice(i + 1)
 
   children = head.concat(root.children)
     .concat(tail)
@@ -23,18 +20,18 @@ function splitAndMerge (children, i, root) {
 }
 
 function tokenizer (eat, value, silent) {
-  let parseImport = /^@import (.*?)(\n|$)/
+  let parseRequire = /^@require (.*?)(\n|$)/
   let node
 
-  while (parseImport.test(value)) {
-    let file = value.match(parseImport)[1]
-    let frag = '@import ' + file
+  while (parseRequire.test(value)) {
+    let file = value.match(parseRequire)[1]
+    let frag = '@require ' + file
 
     value = value.slice(frag.length)
 
     eat(frag)({
       source : this.file,
-      type   : 'import',
+      type   : 'require',
       value  : file
     })
   }
@@ -42,35 +39,39 @@ function tokenizer (eat, value, silent) {
 }
 
 module.exports = function (options) {
-  var proc = this
-  var prt = proc.Parser.prototype
+  var prt = this.Parser.prototype
 
-  prt.blockTokenizers.import = tokenizer
-  prt.blockMethods.unshift('import')
+  prt.blockTokenizers.require = tokenizer
+  prt.blockMethods.unshift('require')
 
-  return function transformer (ast, file) {
-    let children = ast.children
+  return (ast, file) => {
     var headerLevel = 0
 
-    for (let i = 0; i < children.length; i++) {
+    const visit = tree => {
+      let children = tree.children
 
-      let child = children[i]
+      for (let i = 0; i < children.length; ++i) {
+        let child = children[i]
 
-      if (child.type === 'import') {
-        let parsedImport = proc.parse(
-          walkers.toFile(path.join(child.source.dirname, child.value.replace(/"/g, '')))
-        )
+        switch (child.type) {
+          case 'require': {
+            let parsedRequire = this.parse(walkers.toFile(path.join(child.source.dirname, child.value.replace(/"/g, ''))))
+            let processed = this.runSync(parsedRequire)
+    
+            processed = bumpAndLink(processed, headerLevel, child)
+            children = splitAndMerge(children, i, processed)
+            i -= 1
+          } break;
 
-        file.info(`Importing ${child.value} from @import statement.`, child.position, PLUGIN_NAME)
-        let root = proc.runSync(parsedImport)
-
-        root = bumpAndLink(root, headerLevel, child)
-        children = splitAndMerge(children, i, root)
-        i += root.children.length - one
+          case 'heading': {
+            headerLevel = child.depth
+          } break;
+        }
       }
 
-      if (child.type === 'heading') headerLevel = child.depth
-    }
-    ast.children = children
+      tree.children = children
+    };
+
+    visit(ast)
   }
 }

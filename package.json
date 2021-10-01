@@ -1,7 +1,7 @@
 {
-  "name": "remark-import",
-  "version": "0.0.8",
-  "description": "Transform @import statements to contents. Forked and heavily revised from Stephe Belanger's original remark-include.",
+  "name": "remark-require",
+  "version": "1.0.0",
+  "description": "Transform @require statements to contents.",
   "keywords": [
     "remark",
     "import",
@@ -24,17 +24,26 @@
     {
       "name": "Stephen Belanger",
       "email": "admin@stephenbelanger.com"
+    },
+    {
+      "name": "Maël Nison",
+      "email": "nison.mael@gmail.com"
     }
   ],
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/BrekiTomasson/remark-import.git"
+    "url": "git+https://github.com/arcanis/remark-require.git"
   },
   "dependencies": {
     "is-local-path": "^0.1.6",
-    "js-base64-file": "^1.0.1",
-    "progress": "^2.0.0",
     "vfile": "^2.2.0"
+  },
+  "devDependencies": {
+    "remark": "^13.0.0",
+    "remark-html": "^13.0.0",
+    "remark-parse": "^8.0.0",
+    "to-vfile": "^6.0.0",
+    "unified": "^8.0.0"
   }
 }
